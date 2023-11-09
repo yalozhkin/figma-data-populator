@@ -27,7 +27,8 @@ figma.showUI(uiHtml, { width: 240, height: 300 });
 // Function to find text layers
 function findTextLayersWithNamePattern() {
   const textLayers: string[] = []; // Explicitly define as array of strings
-  const nodes = figma.currentPage.findAll(node => node.type === 'TEXT' && node.name.startsWith('%') && node.name.endsWith('%'));
+
+  const nodes = figma.root.findAll(node => node.type === 'TEXT' && node.name.startsWith('%') && node.name.endsWith('%'));
 
   nodes.forEach((node) => {
     if (node.type === 'TEXT') { // Type guard to ensure node is a TextNode
@@ -42,7 +43,7 @@ function findTextLayersWithNamePattern() {
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'populateText') {
     const targetLayerName = msg.layerName;
-    const targetLayer = figma.currentPage.findOne(node => node.type === 'TEXT' && node.name === targetLayerName);
+    const targetLayer = figma.root.findOne(node => node.type === 'TEXT' && node.name === targetLayerName);
 
     if (targetLayer && targetLayer.type === 'TEXT') { // Type guard to ensure node is a TextNode
       const paragraphs = targetLayer.characters.split('\n');
@@ -54,7 +55,7 @@ figma.ui.onmessage = async (msg) => {
       }
     }
 
-    figma.closePlugin();
+    // figma.closePlugin();
   }
 };
 
